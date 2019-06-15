@@ -1,0 +1,6 @@
+.group{
+    display: block;
+    border: 1px solid gray;
+    height: 100%;
+    width: 70%;
+}
