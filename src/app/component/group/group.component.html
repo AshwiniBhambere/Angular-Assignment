@@ -1,24 +1,21 @@
 <div class="container group" style="padding: 20px">
   <form [formGroup]="groupForm">
-      <div formArrayName="mainRule" class="mainRule">
-        <div *ngFor="let group of groupForm.controls.mainRule.controls; let i = index" class="item">
-          <div [formGroupName]="i" class="item">
-              <div class="row d-flex">
-                  <div class="col mb-4">
-                    <button>AND</button>
-                    <button>OR</button>
-                  </div>
-                  <div class="col-6"></div>
-                  <div class="col">
-                    <button class="btn-success" (click)="addRule()">Add rule</button>
-                    <button class="btn-success" (click)="addGroup()">Add group</button>
-                  </div>
-                
-              </div> 
-            <app-rule [formGroup]="groupForm.controls.mainRule.controls[i]"></app-rule>
-          </div>
-        </div>
+    <div class="header">
+      <div class="condition">
+        <button>AND</button>
+        <button>OR</button>
       </div>
-    </form>
-</div> 
-  
+      <div class="action">
+        <button class="btn-success" (click)="addRule()">Add rule</button>
+        <button class="btn-success" (click)="addGroup()">Add group</button>
+        <button class="btn-danger" *ngIf="groupLevel !=0" (click)="deleteGroup(groupForm.controls['id'].value)">Delete</button>
+      </div>
+    </div>
+    <div formArrayName="rules" class="rules">
+      <div *ngFor="let rule of groupForm.controls.rules.controls; let i = index" class="item" [formGroupName]="i">
+            <app-group *ngIf="rule.controls.type.value === 'group'" [groupForm]="rule" [groupLevel]="i" [groupIndex]="i" (handleDeleteGroup)="deleteChildGroup($event)" ></app-group>
+            <app-rule *ngIf="rule.controls.type.value === 'rule'" [formGroup]="rule" [ruleIndex]='i' (handleDeleteRule)="deleteChildRule($event)"></app-rule> 
+      </div>
+    </div>
+</form>
+</div>

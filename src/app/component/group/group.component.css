@@ -1,6 +1,9 @@
 .group{
-    display: block;
     border: 1px solid gray;
-    height: 100%;
-    width: 70%;
+    margin-top: 10px;
+}
+.header{
+    display: flex;
+    justify-content: space-between;
+    margin: 10px;
 }

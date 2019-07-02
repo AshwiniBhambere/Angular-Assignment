@@ -1,14 +1,11 @@
-<div class="container">
-    <form [formGroup]="formGroup">
-        <div formArrayName="rules">
-            <div class="d-flex" *ngFor="let rule of formGroup.controls.rules.controls; let i=index">
-                <div [formGroupName]="i">
-                    <input formControlName="id" placeholder="id" type="text" class="mr-2">
-                    <input formControlName="name" placeholder="name" type="text" class="mr-2">
-                    <button class="btn-danger" (click)="deleteRule(i)">Delete</button>
-                </div>
-                <app-rule [formGroup]="formGroup.controls.rules.controls[i]"></app-rule>
+   <form [formGroup]="formGroup" class="mt-2">
+        <div class="rule">
+            <div class="controls">
+                <input formControlName="id" placeholder="id" type="text" class="mr-2">
+                <input formControlName="name" placeholder="name" type="text" class="">
+            </div>
+            <div class="action">
+                <button class="btn-danger" (click)="deleteRule(formGroup.controls['id'].value)">Delete</button>
             </div>
         </div>
     </form>
-</div>

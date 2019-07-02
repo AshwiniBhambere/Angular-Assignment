@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { QueryService } from 'src/app/service/query.service';
 
 @Component({
   selector: 'app-root',
@@ -7,4 +8,9 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'querybuilder-Assignment';
+  groupForm:any
+
+  constructor(private queryService:QueryService){
+     this.groupForm=this.queryService.getInitialGroup();
+  }
 }

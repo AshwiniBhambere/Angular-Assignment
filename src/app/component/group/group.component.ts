@@ -1,10 +1,13 @@
-import { Component, OnInit } from '@angular/core';
+import { QueryService } from './../../service/query.service';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
 
 
 import { Group } from './../../model/group';
 import { Rule } from './../../model/rule';
 import { RuleComponent } from 'src/app/component/rule/rule.component';
+
+
 
 @Component({
   selector: 'app-group',
@@ -13,69 +16,40 @@ import { RuleComponent } from 'src/app/component/rule/rule.component';
 })
 export class GroupComponent implements OnInit {
 
-  groupForm: FormGroup
-  rules: any;
-  mainRule: any;
-
-  ruleobj: Rule = {
-    ruleId: "1",
-    ruleName: "RuleOne",
-    type: "Rule"
-  };
-  groupObj: Group = {
-    groupId: 1,
-    groupName: "GroupOne",
-    type: "Group",
-    rules: [this.ruleobj]
-  }
-
-  constructor(private formBuilder: FormBuilder) { }
+ @Input()groupForm: FormGroup;
+ @Input()groupLevel:number=0;
+ @Input()groupIndex:number;
+ @Output()handleDeleteGroup= new EventEmitter()
+ disabled:boolean=true;
+  constructor(private queryService:QueryService) { }
 
   ngOnInit() {
-
-    // setTimeout(()=>{
-    //   console.log('--in parent: ', this.rules)
-    // }, 15000);
-    // this.form = this.formBuilder.group({
-    //   rules: this.formBuilder.array([this.createRule()])
-    // });
-
-    this.groupForm = this.formBuilder.group({
-      mainRule: this.formBuilder.array([this.createGroup()])
-    })
-    //  this.mainRule = this.groupForm.get('mainRule') as FormArray;
-    //  console.log("mainRule",this.mainRule);
   }
 
-  createGroup(): FormGroup {
-    return this.formBuilder.group({
-      groupid: '',
-      rules: this.formBuilder.array([this.createRule()])
-    })
-  }
-
-  createRule(): FormGroup {
-    return this.formBuilder.group({
-      id: '',
-      name: '',
-      rules: ''
-    });
-  }
 
   addRule(): void {
-    // this.rules = this.groupForm.get('rules') as FormArray;
-    // this.rules.push(this.createRule());
+    const rule= this.queryService.createRule();
+    (this.groupForm.controls['rules'] as FormArray).push(rule);
   }
 
 
   addGroup() {
-    this.mainRule = this.groupForm.get('mainRule') as FormArray;
-    this.mainRule.push(this.createGroup());
-    //    this.mainRule.controls.forEach(element => {
-    //      element.controls['rules'].push(this.createGroup());
-    //    });
-    //  console.log("MainRule",this.mainRule);
+    const group = this.queryService.createGroup();
+    (this.groupForm.controls['rules'] as FormArray).push(group);
+  }
 
-    // }
+  deleteChildRule({ruleIndex,id}){
+    (this.groupForm.controls['rules'] as FormArray).removeAt(ruleIndex);
+  }
+  
+  deleteGroup(id:any){
+   this.handleDeleteGroup.emit({
+     groupIndex:this.groupIndex,
+     groupLevel:this.groupLevel,
+     id
+   })
+  }// id not need to emit
+  deleteChildGroup({groupIndex,groupLevel,id}){
+    (this.groupForm.controls['rules'] as FormArray).removeAt(groupIndex);
   }
 }

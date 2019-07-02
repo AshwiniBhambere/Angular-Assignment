@@ -1,0 +1,12 @@
+.rule{
+    display: flex;
+  justify-content: space-between;
+}
+.controls{
+    display: flex;
+    /* justify-content:center; */
+}
+.action{
+    /* justify-content:end; */
+    margin-right: 10px;
+}

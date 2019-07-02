@@ -1,9 +1,10 @@
 
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit,EventEmitter } from '@angular/core';
 import { FormBuilder, FormArray, FormGroup } from '@angular/forms';
-import { Input } from '@angular/core';
+import { Input,Output } from '@angular/core';
 
 import { Rule } from './../../model/rule';
+
 
 
 @Component({
@@ -14,6 +15,8 @@ import { Rule } from './../../model/rule';
 export class RuleComponent implements OnInit {
    
    @Input() formGroup: FormGroup;
+   @Input()ruleIndex:number;
+   @Output()handleDeleteRule = new EventEmitter()
   constructor(private formBuilder:FormBuilder) { }
 
   ngOnInit() {
@@ -21,9 +24,16 @@ export class RuleComponent implements OnInit {
     //   this.rules.removeAt(0);
     //   console.log('removed one entry from child: ', this.rules);
     // }, 10000)
+    console.log("formGroup",this.formGroup);
+  }
+  ngDoCheck(){
+    console.log("Form Valid",this.formGroup.valid);
   }
 
-// deleteRule(i:number){
-//   this.rules.removeAt(i);
-//   }
+deleteRule(id:any){
+  this.handleDeleteRule.emit({
+     ruleIndex:this.ruleIndex,
+     id
+  })
+  }// id not need to emit
 }
